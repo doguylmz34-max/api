@@ -4,9 +4,9 @@ from datetime import date
 
 class handler(BaseHTTPRequestHandler):
     def do_GET(self):
+        body = json.dumps({"today": date.today().isoformat()}).encode()
         self.send_response(200)
         self.send_header("Content-Type", "application/json")
+        self.send_header("Content-Length", str(len(body)))
         self.end_headers()
-        
-        response = {"today": date.today().isoformat()}
-        self.wfile.write(json.dumps(response).encode())
+        self.wfile.write(body)
