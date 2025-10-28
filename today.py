@@ -1,17 +1,12 @@
-from datetime import date
+from http.server import BaseHTTPRequestHandler
 import json
+from datetime import date
 
-def handler(request):
-    """
-    Vercel serverless fonksiyonu için handler.
-    request: Vercel'in otomatik olarak verdiği request objesi
-    """
-    return {
-        'statusCode': 200,
-        'headers': {
-            'Content-Type': 'application/json',
-        },
-        'body': json.dumps({
-            'today': date.today().isoformat()
-        })
-    }
+class handler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.send_header("Content-Type", "application/json")
+        self.end_headers()
+        
+        response = {"today": date.today().isoformat()}
+        self.wfile.write(json.dumps(response).encode())
